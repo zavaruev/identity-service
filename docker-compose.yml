@@ -8,7 +8,7 @@ services:
     # on this host. Set the *_URL variables below for a remote deployment.
     network_mode: host
     environment:
-      - TZ=Europe/Moscow
+      - TZ=${TZ:-Europe/Moscow}
       - PYTHONUNBUFFERED=1
       - IDENTITY_DATA_FILE=/app/data/profiles.json
       - VOICE_GALLERY_DIR=/app/speakers
@@ -28,6 +28,5 @@ services:
     volumes:
       - ./data:/app/data
       - ./speakers:/app/speakers:ro
-      - ./known_faces:/app/known_faces:ro
       # Read-only source frames: identity only COPIES them into its own library.
       - ./face_pending:/app/face_pending:ro
