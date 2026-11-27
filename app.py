@@ -30,7 +30,7 @@ def _token() -> str:
 
 
 def _admin() -> tuple:
-    return os.getenv("IDENTITY_ADMIN_USER", "identityadmin"), os.getenv("IDENTITY_ADMIN_PASSWORD", "")
+    return os.getenv("IDENTITY_ADMIN_USER", ""), os.getenv("IDENTITY_ADMIN_PASSWORD", "")
 
 
 def _basic_ok(request: Request) -> bool:
