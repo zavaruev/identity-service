@@ -1,0 +1,33 @@
+services:
+  identity:
+    build: .
+    image: identity-service:latest
+    container_name: identity
+    restart: unless-stopped
+    # Linux host networking: the external engines and the gateway are expected
+    # on this host. Set the *_URL variables below for a remote deployment.
+    network_mode: host
+    environment:
+      - TZ=Europe/Moscow
+      - PYTHONUNBUFFERED=1
+      - IDENTITY_DATA_FILE=/app/data/profiles.json
+      - VOICE_GALLERY_DIR=/app/speakers
+      - SPEAKER_ID_URL=${SPEAKER_ID_URL:-http://localhost:8001}
+      - FACE_API_URL=${FACE_API_URL:-http://localhost:8090}
+      - GATEWAY_URL=${GATEWAY_URL:-http://localhost:18792}
+      # Deployment-specific: the room picker and /api/record validate against
+      # this comma-separated list. Rename it for your own camera streams.
+      - IDENTITY_ROOMS=${IDENTITY_ROOMS:-room1,room2}
+      - FACE_PENDING_DIR=/app/face_pending
+      - API_KEY=${API_KEY:-}
+      # Fail closed: empty secrets disable the corresponding endpoints.
+      - IDENTITY_TOKEN=${IDENTITY_TOKEN:-}
+      - IDENTITY_ADMIN_USER=${IDENTITY_ADMIN_USER:-}
+      - IDENTITY_ADMIN_PASSWORD=${IDENTITY_ADMIN_PASSWORD:-}
+      - IDENTITY_CAPTURE_TOKEN=${IDENTITY_CAPTURE_TOKEN:-}
+    volumes:
+      - ./data:/app/data
+      - ./speakers:/app/speakers:ro
+      - ./known_faces:/app/known_faces:ro
+      # Read-only source frames: identity only COPIES them into its own library.
+      - ./face_pending:/app/face_pending:ro

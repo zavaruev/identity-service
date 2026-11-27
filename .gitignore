@@ -1,0 +1,14 @@
+# Local secrets
+.env
+
+# Biometric and deployment state: never commit a profile store or a gallery.
+data/
+speakers/
+known_faces/
+face_pending/
+captures/
+
+# Python caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
