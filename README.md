@@ -32,7 +32,7 @@ repository.
 ```sh
 cp .env.example .env
 # Edit .env: set the four secrets and the URLs of your engines.
-mkdir -p data speakers known_faces face_pending
+mkdir -p data speakers face_pending
 docker compose up -d --build
 ```
 
@@ -68,6 +68,9 @@ entries and no absolute host paths.
 | `FACE_API_URL` | `http://localhost:8090` | Face-recognition engine base URL. |
 | `GATEWAY_URL` | `http://localhost:18792` | Gateway base URL for `POST /api/identity/capture`. |
 | `IDENTITY_ROOMS` | `room1,room2` | Deployment-specific room list for the picker and `/api/record` validation. Rename for your cameras. |
+| `IDENTITY_CAPTURE_MIN_RMS` | `800` | Minimum RMS of a live camera capture; quieter recordings are refused. |
+| `IDENTITY_CAPTURE_MIN_PEAK` | `4000` | Minimum peak of a live camera capture; quieter recordings are refused. |
+| `IDENTITY_PHOTO_MIN_CONF` | `0.35` | Minimum face-recognition confidence for a source frame to be kept. |
 | `TZ` | `Europe/Moscow` | Container time zone. |
 
 The compose file also sets `IDENTITY_DATA_FILE=/app/data/profiles.json`,
