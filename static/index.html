@@ -137,6 +137,7 @@ footer{padding:0 24px 16px;text-align:center}
 const $ = (s, r=document) => r.querySelector(s);
 const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const status = msg => $('#status-msg').textContent = msg;
+const QUALITY = {};
 
 function applyTheme(theme) {
   document.documentElement.dataset.theme = theme;
@@ -156,6 +157,7 @@ async function call(url, options, ok, profileKey) {
     if (body && body.quality) {
       const q = body.quality;
       const line = `Quality: ${q.verdict} — ${q.advice} (rms ${q.rms ?? '—'}, peak ${q.peak ?? '—'}, ${q.duration ?? '—'} s)`;
+      if (profileKey) QUALITY[profileKey] = line;
       const slot = profileKey && $(`[data-quality="${profileKey}"]`);
       if (slot) slot.textContent = line; else status(line);
     }
@@ -206,7 +208,7 @@ function profileCard(p) {
           <input class="file" type="file" name="files" multiple accept="audio/*">
           <button class="pill" type="submit">Upload voice</button>
           <span class="warn">Replaces the current sample completely — append is not supported.</span>
-          <span class="muted">Sample quality: <span data-quality="${key}">no recording yet</span></span>
+          <span class="muted">Sample quality: <span data-quality="${key}">${esc(QUALITY[key] || 'no recording yet')}</span></span>
         </form>
         <form data-form="face" data-key="${key}" enctype="multipart/form-data" data-url="/api/profiles/${key}/face/enroll">
           <span class="muted">Photos</span>
